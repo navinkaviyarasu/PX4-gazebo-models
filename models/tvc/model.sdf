@@ -821,5 +821,20 @@
       <dimensions>3</dimensions>
     </plugin>
 
+    <!-- <plugin filename="libgazebo-joint-state-publisher-system.so" name="joint_state_publisher">
+      <topic>/joint_state</topic>
+    </plugin> -->
+
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>gimbal_roll</topic>
+      <joint_name>servo0_roll_joint</joint_name>
+      <!-- <joint_name>servo1_pitch_joint</joint_name> -->
+    </plugin>
+
+    <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
+      <topic>gimbal_pitch</topic>
+      <joint_name>servo1_pitch_joint</joint_name>
+    </plugin>
+
   </model>
 </sdf>
