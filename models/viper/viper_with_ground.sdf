@@ -31,7 +31,7 @@
 
     <!-- Include the local viper model by absolute file URI. Update this path if your workspace moves. -->
     <include>
-      <uri>file:///home/nk/workspace/TVC_ws/src/tvc_controller/models/viper/model.sdf</uri>
+      <uri>file:///home/nk/workspace/nautilus/PX4v1.16.0/Tools/simulation/gz/models/viper/model.sdf</uri>
     </include>
 
     <!-- World gravity should be set on the world, not inside the physics block -->
