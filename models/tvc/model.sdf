@@ -828,7 +828,6 @@
     <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
       <topic>gimbal_roll</topic>
       <joint_name>servo0_roll_joint</joint_name>
-      <!-- <joint_name>servo1_pitch_joint</joint_name> -->
     </plugin>
 
     <plugin filename="gz-sim-joint-state-publisher-system" name="gz::sim::systems::JointStatePublisher">
