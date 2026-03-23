@@ -898,8 +898,29 @@
       <pitch_joint>servo1_pitch_joint</pitch_joint>
       <engine_link>motor_housing</engine_link>
       
-      <!-- Gazebo Transport Topic for Servo Commands -->
-      <topic>/tvc_servo_command</topic>
+      <!-- Input Mode: "joint_position" for PX4 SITL or "transport_topic" for legacy -->
+      <input_mode>joint_position</input_mode>
+      
+      <!-- Input Format: "normalized_minus1_1" (PX4 default), "pwm_1000_2000", "servo_length", or "joint_angle" -->
+      <input_format>normalized_minus1_1</input_format>
+      
+      <!-- Servo Command Topics (used when input_mode is "joint_position") -->
+      <servo_0_topic>/gazebo/servo_0</servo_0_topic>
+      <servo_1_topic>/gazebo/servo_1</servo_1_topic>
+      
+      <!-- Legacy Transport Topic (used when input_mode is "transport_topic") -->
+      <transport_topic>/tvc_servo_command</transport_topic>
+      
+      <!-- Gimbal Kinematics Configuration -->
+      <gimbal_kinematics_model>linear</gimbal_kinematics_model>
+      <!-- Moment arm for roll control (meters) -->
+      <roll_moment_arm>0.05</roll_moment_arm>
+      <!-- Moment arm for pitch control (meters) -->
+      <pitch_moment_arm>0.05</pitch_moment_arm>
+      <!-- Neutral servo length for roll (meters) - servo at 0 degrees roll -->
+      <neutral_length_roll>0.10</neutral_length_roll>
+      <!-- Neutral servo length for pitch (meters) - servo at 0 degrees pitch -->
+      <neutral_length_pitch>0.10</neutral_length_pitch>
     </plugin>
 
     <plugin filename="libgz-sim-pose-publisher-system.so"
