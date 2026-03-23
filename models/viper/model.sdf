@@ -862,7 +862,7 @@
       <p_gain>1</p_gain>
     </plugin> -->
 
-    <plugin filename="libTVCPlugin.so" name="TVCPlugin">
+    <!-- <plugin filename="libTVCPlugin.so" name="TVCPlugin">
       <roll_joint>servo0_roll_joint</roll_joint>
       <pitch_joint>servo1_pitch_joint</pitch_joint>
       <engine_link>motor_housing</engine_link>
@@ -870,6 +870,35 @@
       <servo_time_constant>0.10</servo_time_constant>
       <servo_min_len>0.085</servo_min_len>
       <servo_max_len>0.115</servo_max_len>
+      <topic>/tvc_servo_command</topic>
+    </plugin> -->
+
+        <!-- TVC Servo Control Plugin with configurable dynamics -->
+    <plugin filename="libTVCPlugin.so" name="tvc_plugin::TVCPlugin">
+      <!-- Dynamics Model Selection: "first_order" or "second_order" -->
+      <dynamics_model>first_order</dynamics_model>
+      
+      <!-- Common Parameters -->
+      <servo_max_speed>0.112</servo_max_speed>
+      <servo_min_len>0.085</servo_min_len>
+      <servo_max_len>0.115</servo_max_len>
+      
+      <!-- First-order System Parameters -->
+      <!-- Time constant (seconds) for first-order model -->
+      <servo_time_constant>0.1</servo_time_constant>
+      
+      <!-- Second-order System Parameters -->
+      <!-- Natural frequency (rad/s) for second-order model - typical range 2-10 -->
+      <servo_natural_freq>5.0</servo_natural_freq>
+      <!-- Damping ratio (dimensionless) - 0.7 is slightly underdamped with minimal overshoot -->
+      <servo_damping_ratio>0.7</servo_damping_ratio>
+      
+      <!-- Joint/Link References -->
+      <roll_joint>servo0_roll_joint</roll_joint>
+      <pitch_joint>servo1_pitch_joint</pitch_joint>
+      <engine_link>motor_housing</engine_link>
+      
+      <!-- Gazebo Transport Topic for Servo Commands -->
       <topic>/tvc_servo_command</topic>
     </plugin>
 
