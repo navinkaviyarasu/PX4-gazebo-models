@@ -4,7 +4,7 @@
   <!-- <pose> 2 0 0 0 0 -1.57</pose> -->
   <!-- <static>true</static> -->
     <link name="base_link">
-      <pose>0 0 0.7725 0 0 0</pose>
+      <pose>0 0 0.7725 0 0 0</pose> <!--0.7725-->
       <inertial>
         <mass>0.8</mass>
         <pose>0 0 0 0 0 0</pose>
@@ -744,8 +744,8 @@
           <velocity>10.0</velocity> -->
         </limit>
         <!-- <dynamics>
-          <damping>0.09</damping>
-          <friction>0.001</friction>
+          <damping>1.0</damping>  
+          <friction>0.02</friction> 
         </dynamics> -->
       </axis>
     </joint>
@@ -765,8 +765,8 @@
           <velocity>10.0</velocity> -->
         </limit>
         <!-- <dynamics>
-          <damping>0.09</damping>
-          <friction>0.001</friction>
+          <damping>1.0</damping>  
+          <friction>0.02</friction> 
         </dynamics> -->
       </axis>
     </joint>
@@ -853,9 +853,9 @@
       <joint_name>servo1_pitch_joint</joint_name>
       <sub_topic>servo_1</sub_topic>
       <p_gain>1</p_gain>
-    </plugin>
+    </plugin> -->
 
-    <plugin filename="gz-sim-joint-position-controller-system"
+    <!-- <plugin filename="gz-sim-joint-position-controller-system"
             name="gz::sim::systems::JointPositionController">
       <joint_name>servo0_roll_joint</joint_name>
       <sub_topic>servo_0</sub_topic>
@@ -873,65 +873,109 @@
       <topic>/tvc_servo_command</topic>
     </plugin> -->
 
-        <!-- TVC Servo Control Plugin with Real Gimbal Kinematics -->
+    <!-- Reference for custom TVC Servo Control Plugin with Real Gimbal Kinematics
     <plugin filename="libTVCPlugin.so" name="TVCPlugin">
-      <!-- Dynamics Model Selection: "first_order" or "second_order" -->
-      <dynamics_model>first_order</dynamics_model>
+
+      <dynamics_model>first_order</dynamics_model>        Dynamics Model Selection: "first_order" or "second_order" 
       
-      <!-- Servo Physical Parameters -->
+      Servo Physical Parameters
       <servo_max_speed>0.112</servo_max_speed>
-      <servo_min_len>0.085</servo_min_len>
-      <servo_max_len>0.115</servo_max_len>
+      <servo_min_len>0.108</servo_min_len>  108 mm (corrected from 85mm) 
+      <servo_max_len>0.135</servo_max_len>  135 mm (corrected from 115mm) 
       
-      <!-- First-order Dynamics Parameters -->
-      <servo_time_constant>0.1</servo_time_constant>
+      First-order Dynamics Parameters
+      <servo_time_constant>0.2</servo_time_constant>  Increased from 0.1 to 0.2s for smoother response
       
-      <!-- Second-order Dynamics Parameters -->
+      Second-order Dynamics Parameters
       <servo_natural_freq>5.0</servo_natural_freq>
       <servo_damping_ratio>0.7</servo_damping_ratio>
       
-      <!-- Joint/Link References -->
+      Joint/Link References
       <roll_joint>servo0_roll_joint</roll_joint>
       <pitch_joint>servo1_pitch_joint</pitch_joint>
       <engine_link>motor_housing</engine_link>
       
-      <!-- Input Configuration -->
+      Input Configuration
       <input_mode>joint_position</input_mode>
       <input_format>normalized_minus1_1</input_format>
       
-      <!-- PX4 SITL Servo Command Topics -->
-      <servo_0_topic>/gazebo/servo_0</servo_0_topic>
-      <servo_1_topic>/gazebo/servo_1</servo_1_topic>
+      PX4 SITL Servo Command Topics
+      <servo_0_topic>/servo_0</servo_0_topic>
+      <servo_1_topic>/servo_1</servo_1_topic>
       
-      <!-- Legacy Transport Topic (backward compatibility) -->
+      Legacy Transport Topic (backward compatibility)
       <transport_topic>/tvc_servo_command</transport_topic>
       
-      <!-- REAL GIMBAL GEOMETRY PARAMETERS (in meters) -->
-      <!-- These parameters define the gimbal mechanical structure -->
-      <!-- Tail stroke clevis position (relative to gimbal center) -->
-      <gimbal_xB>0.06741</gimbal_xB>     <!-- 67.41 mm -->
-      <gimbal_zB>0.0917</gimbal_zB>      <!-- 91.7 mm -->
-      <!-- Rod-end clevis position (relative to gimbal center) -->
-      <gimbal_yE>0.06741</gimbal_yE>     <!-- 67.41 mm -->
-      <gimbal_zE>0.0917</gimbal_zE>      <!-- 91.7 mm -->
-      <!-- Gimbal arm parameters -->
-      <gimbal_L4>0.0228</gimbal_L4>      <!-- 22.8 mm (origin to C along Z) -->
-      <gimbal_L5>0.028</gimbal_L5>       <!-- 28.0 mm (servo 1 arm length along X) -->
-      <gimbal_L7>0.028</gimbal_L7>       <!-- 28.0 mm (servo 2 arm length along Y) -->
+      REAL GIMBAL GEOMETRY PARAMETERS (in meters)
+      These parameters define the gimbal mechanical structure
+      Tail stroke clevis position (relative to gimbal center)
+      <gimbal_xB>0.06741</gimbal_xB>     67.41 mm
+      <gimbal_zB>0.0917</gimbal_zB>      91.7 mm
+      Rod-end clevis position (relative to gimbal center)
+      <gimbal_yE>0.06741</gimbal_yE>     67.41 mm
+      <gimbal_zE>0.0917</gimbal_zE>      91.7 mm
+      Gimbal arm parameters
+      <gimbal_L4>0.0</gimbal_L4>      22.8 mm (origin to C along Z)
+      <gimbal_L5>0.028</gimbal_L5>       28.0 mm (servo 1 arm length along X)
+      <gimbal_L7>0.028</gimbal_L7>       28.0 mm (servo 2 arm length along Y)
       
-      <!-- SERVO CALIBRATION PARAMETERS -->
-      <!-- These parameters relate PWM/normalized input to servo stroke length -->
-      <!-- Slope: change in length per unit PWM -->
-      <servo_a3>0.0225</servo_a3>        <!-- 22.5 mm per 1000 µs for servo 1 -->
-      <servo_a6>0.0225</servo_a6>        <!-- 22.5 mm per 1000 µs for servo 2 -->
-      <!-- Neutral PWM values -->
-      <servo_p01>1500.0</servo_p01>      <!-- 1500 µs neutral for servo 1 -->
-      <servo_p02>1500.0</servo_p02>      <!-- 1500 µs neutral for servo 2 -->
-      <!-- Servo length limits (from MightyZap 12LF-12PT-27) -->
-      <servo_L3_min>0.085</servo_L3_min> <!-- 85 mm min for servo 1 -->
-      <servo_L3_max>0.115</servo_L3_max> <!-- 115 mm max for servo 1 -->
-      <servo_L6_min>0.085</servo_L6_min> <!-- 85 mm min for servo 2 -->
-      <servo_L6_max>0.115</servo_L6_max> <!-- 115 mm max for servo 2 -->
+       SERVO CALIBRATION PARAMETERS
+      These parameters relate PWM/normalized input to servo stroke length
+      Slope: change in length per unit PWM
+      <servo_a3>0.0225</servo_a3>        22.5 mm per 1000 µs for servo 1
+      <servo_a6>0.0225</servo_a6>        22.5 mm per 1000 µs for servo 2
+      Neutral PWM values
+      <servo_p01>1500.0</servo_p01>      1500 µs neutral for servo 1
+      <servo_p02>1500.0</servo_p02>      1500 µs neutral for servo 2
+      Servo length limits (from MightyZap 12LF-12PT-27: 27mm total stroke) 
+      Neutral servo length is ~121 mm, so limits are neutral ± 13.5 mm
+      <servo_L3_min>0.0861</servo_L3_min>  108 mm min for servo 1
+      <servo_L3_max>0.1133</servo_L3_max>  135 mm max for servo 1 
+      <servo_L6_min>0.0861</servo_L6_min>  108 mm min for servo 2 
+      <servo_L6_max>0.1133</servo_L6_max>  135 mm max for servo 2 
+    </plugin> -->
+
+    <plugin filename="libTVCPlugin.so" name="TVCPlugin">
+
+      <dynamics_model>first_order</dynamics_model>
+
+      <servo_max_speed>0.112</servo_max_speed>
+      <servo_min_len>0.108</servo_min_len>
+      <servo_max_len>0.135</servo_max_len> 
+    
+      <servo_time_constant>0.2</servo_time_constant>
+      
+      <servo_natural_freq>5.0</servo_natural_freq>
+      <servo_damping_ratio>0.7</servo_damping_ratio>
+      
+      <roll_joint>servo0_roll_joint</roll_joint>
+      <pitch_joint>servo1_pitch_joint</pitch_joint>
+      <engine_link>motor_housing</engine_link>
+
+      <input_mode>joint_position</input_mode>
+      <input_format>normalized_minus1_1</input_format>
+
+      <servo_0_topic>/gazebo/servo_0</servo_0_topic>
+      <servo_1_topic>/gazebo/servo_1</servo_1_topic>
+
+      <transport_topic>/tvc_servo_command</transport_topic>
+      
+      <gimbal_xB>0.06741</gimbal_xB>
+      <gimbal_zB>0.0917</gimbal_zB>
+      <gimbal_yE>0.06741</gimbal_yE>
+      <gimbal_zE>0.0917</gimbal_zE>
+      <gimbal_L4>0.0</gimbal_L4>
+      <gimbal_L5>0.028</gimbal_L5>   
+      <gimbal_L7>0.028</gimbal_L7>      
+      
+      <servo_a3>0.0225</servo_a3>
+      <servo_a6>0.0225</servo_a6>
+      <servo_p01>1500.0</servo_p01>
+      <servo_p02>1500.0</servo_p02>
+      <servo_L3_min>0.0861</servo_L3_min>
+      <servo_L3_max>0.1133</servo_L3_max>
+      <servo_L6_min>0.0861</servo_L6_min>
+      <servo_L6_max>0.1133</servo_L6_max>
     </plugin>
 
     <plugin filename="libgz-sim-pose-publisher-system.so"
