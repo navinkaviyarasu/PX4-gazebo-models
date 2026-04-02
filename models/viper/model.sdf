@@ -848,19 +848,21 @@
       <motorType>velocity</motorType>
     </plugin>
 
-    <!-- <plugin filename="gz-sim-joint-position-controller-system"
+    <plugin filename="gz-sim-joint-position-controller-system"
             name="gz::sim::systems::JointPositionController">
       <joint_name>servo1_pitch_joint</joint_name>
-      <sub_topic>servo_1</sub_topic>
+      <!-- <sub_topic>servo_1</sub_topic> -->
+      <sub_topic>servo_pitch</sub_topic>
       <p_gain>1</p_gain>
-    </plugin> -->
+    </plugin>
 
-    <!-- <plugin filename="gz-sim-joint-position-controller-system"
+    <plugin filename="gz-sim-joint-position-controller-system"
             name="gz::sim::systems::JointPositionController">
       <joint_name>servo0_roll_joint</joint_name>
-      <sub_topic>servo_0</sub_topic>
+      <!-- <sub_topic>servo_0</sub_topic> -->
+      <sub_topic>servo_roll</sub_topic>
       <p_gain>1</p_gain>
-    </plugin> -->
+    </plugin>
 
     <!-- <plugin filename="libTVCPlugin.so" name="TVCPlugin">
       <roll_joint>servo0_roll_joint</roll_joint>
@@ -887,7 +889,7 @@
       <servo_time_constant>0.2</servo_time_constant>  Increased from 0.1 to 0.2s for smoother response
       
       Second-order Dynamics Parameters
-      <servo_natural_freq>5.0</servo_natural_freq>
+      <servo_natural_freq>5.0</servo_natural_freq> Natural frequency in rad/sec
       <servo_damping_ratio>0.7</servo_damping_ratio>
       
       Joint/Link References
@@ -937,7 +939,7 @@
 
     <plugin filename="libTVCPlugin.so" name="TVCPlugin">
 
-      <dynamics_model>first_order</dynamics_model>
+      <dynamics_model>second_order</dynamics_model>
 
       <servo_max_speed>0.112</servo_max_speed>
       <servo_min_len>0.108</servo_min_len>
@@ -945,37 +947,45 @@
     
       <servo_time_constant>0.2</servo_time_constant>
       
-      <servo_natural_freq>5.0</servo_natural_freq>
-      <servo_damping_ratio>0.7</servo_damping_ratio>
+      <servo_natural_freq>37.07079327</servo_natural_freq>
+      <servo_damping_ratio>0.95</servo_damping_ratio>
       
-      <roll_joint>servo0_roll_joint</roll_joint>
-      <pitch_joint>servo1_pitch_joint</pitch_joint>
       <engine_link>motor_housing</engine_link>
 
       <input_mode>joint_position</input_mode>
       <input_format>normalized_minus1_1</input_format>
 
+      <!-- Input Topics -->
       <servo_0_topic>/gazebo/servo_0</servo_0_topic>
       <servo_1_topic>/gazebo/servo_1</servo_1_topic>
 
       <transport_topic>/tvc_servo_command</transport_topic>
       
+      <!-- Angle output topics for JointPositionController -->
+      <roll_angle_topic>/model/viper/servo_roll</roll_angle_topic>
+      <pitch_angle_topic>/model/viper/servo_pitch</pitch_angle_topic>
+      
       <gimbal_xB>0.06741</gimbal_xB>
       <gimbal_zB>0.0917</gimbal_zB>
       <gimbal_yE>0.06741</gimbal_yE>
       <gimbal_zE>0.0917</gimbal_zE>
-      <gimbal_L4>0.0</gimbal_L4>
+      <gimbal_L4>0.0228</gimbal_L4>
       <gimbal_L5>0.028</gimbal_L5>   
       <gimbal_L7>0.028</gimbal_L7>      
-      
-      <servo_a3>0.0225</servo_a3>
-      <servo_a6>0.0225</servo_a6>
-      <servo_p01>1500.0</servo_p01>
-      <servo_p02>1500.0</servo_p02>
-      <servo_L3_min>0.0861</servo_L3_min>
-      <servo_L3_max>0.1133</servo_L3_max>
-      <servo_L6_min>0.0861</servo_L6_min>
-      <servo_L6_max>0.1133</servo_L6_max>
+    
+      <!-- Servo calibration parameters (matches tvc_model.py) -->
+      <!-- a3, a6: servo stroke per unit normalized input (meters) -->
+      <!-- 13.5mm stroke = 0.0135m for ±1.0 normalized input -->
+      <!-- p01, p02: neutral reference (normalized inputs, set to 0) -->
+      <servo_a3>0.0135</servo_a3>
+      <servo_a6>0.0135</servo_a6>
+      <servo_p01>0.0</servo_p01>
+      <servo_p02>0.0</servo_p02>
+
+      <servo_L3_min>0.108</servo_L3_min>
+      <servo_L3_max>0.135</servo_L3_max>
+      <servo_L6_min>0.108</servo_L6_min>
+      <servo_L6_max>0.135</servo_L6_max>
     </plugin>
 
     <plugin filename="libgz-sim-pose-publisher-system.so"
@@ -999,13 +1009,12 @@
       <topic>gimbal_roll</topic>
       <joint_name>servo0_roll_joint</joint_name>
     </plugin>
-
+  
     <plugin filename="gz-sim-joint-state-publisher-system" 
     name="gz::sim::systems::JointStatePublisher">
       <topic>gimbal_pitch</topic>
       <joint_name>servo1_pitch_joint</joint_name>
     </plugin>
-
 
     <!-- With current gazebo harmonic and gz-sim, the below plugin is not available -->
     <!-- <plugin filename="libgz-sim-wrench-publisher-system.so" name="gz::sim::systems::WrenchPublisher">
